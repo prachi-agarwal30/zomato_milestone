@@ -25,10 +25,14 @@ import json
 import os
 from typing import Any
 
-from dotenv import load_dotenv
+from dotenv import find_dotenv, load_dotenv
 from groq import Groq
 
-load_dotenv()
+# Load .env robustly: first search up from the current working directory, then
+# fall back to a .env sitting next to this module, so the key is found
+# regardless of which directory the app is launched from.
+load_dotenv(find_dotenv(usecwd=True))
+load_dotenv(os.path.join(os.path.dirname(os.path.abspath(__file__)), ".env"))
 
 DEFAULT_MODEL = "llama-3.3-70b-versatile"
 
